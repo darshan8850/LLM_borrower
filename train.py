@@ -11,8 +11,6 @@ from torch.utils.data import DataLoader
 from huggingface_hub.hf_api import HfFolder
 from datasets import Dataset
 
-import gdown
-
 hf_api_key = "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"
 HfFolder.save_token(hf_api_key)
 
@@ -20,20 +18,7 @@ model_name="TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T"
 pad_token="<pad>"
 
 
-def download_file_from_google_drive(url, output):
-    file_id = url.split('/')[-2]
-    download_url = f'https://drive.google.com/uc?id={file_id}'
-    gdown.download(download_url, output, quiet=False)
-    
-google_drive_url = "https://drive.google.com/file/d/your_file_id_here/view?usp=sharing"
-output_file_path = "data.csv"
-
-
-download_file_from_google_drive(google_drive_url, output_file_path)
-
-print("File downloaded successfully!")
-
-df2 = pd.read_csv("./data.csv")
+df2 = pd.read_csv("./borrower_data.csv")
 
 train, test = train_test_split(df2, test_size=0.2, random_state=42)
 train, val = train_test_split(train, test_size=0.2, random_state=42)
