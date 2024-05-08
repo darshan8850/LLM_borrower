@@ -92,7 +92,7 @@ lora_config= LoraConfig(r=128,lora_alpha=128,target_modules=["self_atth.q_proj",
 model=get_peft_model(model, lora_config)
 model.print_trainable_parameters()
 
-response_template_with_context = "\n# Sentiment_Labels:"
+response_template_with_context = "\n#Sentiment_Labels:"
 response_template_ids= tokenizer.encode(response_template_with_context, add_special_tokens=False)[2:]
 collator = DataCollatorForCompletionOnlyLM(response_template_ids, tokenizer=tokenizer)
 examples = [format_example(dataset["train"][0])] 
@@ -109,19 +109,18 @@ training_arguments = TrainingArguments(
     num_train_epochs=1,
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,
-    optimizer_type="adamw",  # Use "adamw" instead of "optim"
+    optim="adamw_torch",  
     evaluation_strategy="steps",
-    eval_steps=500,  # Assuming you want to evaluate every 500 steps
-    
+    eval_steps=0.2,  
     logging_steps=10,
     learning_rate=1e-4,
-    fp16=True,  # Enable FP16 training
+    fp16=True,  
     save_strategy="epoch",
     max_grad_norm=1.0,
     warmup_ratio=0.1,
-    lr_scheduler_type="linear",  # Use "linear" for a linear learning rate scheduler
+    lr_scheduler_type="constant",
     report_to="tensorboard",
-    save_total_limit=5,  # Maximum number of checkpoints to save
+    save_safetensors=True,  
     seed=SEED
 )
 
@@ -175,7 +174,7 @@ trainer= SFTTrainer(
         train_dataset=dataset["train"],
         eval_dataset=dataset["val"],
         tokenizer=tokenizer,
-        max_seq_length=1024,
+        max_seq_length=2048,
         formatting_func=format_prompts,
         data_collator=collator
 )
