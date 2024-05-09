@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 
 from huggingface_hub.hf_api import HfFolder
 from datasets import Dataset
-from huggingface_hub import HubManager
+
 
 hf_api_key = "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"
 HfFolder.save_token(hf_api_key)
@@ -108,7 +108,7 @@ SEED = 42
 training_arguments = TrainingArguments(       
     output_dir="experiments",
     num_train_epochs=1,
-    per_device_train_batch_size=4,
+    per_device_train_batch_size=2,
     gradient_accumulation_steps=4,
     optim="adamw_torch",  
     evaluation_strategy="steps",
@@ -184,16 +184,3 @@ trainer.train()
 trainer.model.save_pretrained("borrower_llm")
 tokenizer.save_pretrained("borrower_llm")
 
-
-model_name = "darshan8950/llm_borrower" 
-
-hub_manager = HubManager()
-try:
-    hub_manager.upload_dir(
-        "borrower_llm",  
-        model_id=model_name, 
-        overwrite=True, 
-    )
-    print(f"Model and tokenizer successfully uploaded to Hugging Face: {model_name}")
-except Exception as e:
-    print(f"An error occurred during upload: {e}")
