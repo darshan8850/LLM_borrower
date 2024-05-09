@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 
 from huggingface_hub.hf_api import HfFolder
 from datasets import Dataset
+from huggingface_hub import HubManager
 
 hf_api_key = "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"
 HfFolder.save_token(hf_api_key)
@@ -128,7 +129,7 @@ training_arguments = TrainingArguments(
 def format_prompts(example):
     
     output_texts = []
-    for i in range(len(example['title'])):
+    for i in range(len(example['Income Range'])):
       text= inspect.cleandoc(f"""
 
         #Income Range
@@ -182,3 +183,17 @@ trainer= SFTTrainer(
 trainer.train()
 trainer.model.save_pretrained("borrower_llm")
 tokenizer.save_pretrained("borrower_llm")
+
+
+model_name = "darshan8950/llm_borrower" 
+
+hub_manager = HubManager()
+try:
+    hub_manager.upload_dir(
+        "borrower_llm",  
+        model_id=model_name, 
+        overwrite=True, 
+    )
+    print(f"Model and tokenizer successfully uploaded to Hugging Face: {model_name}")
+except Exception as e:
+    print(f"An error occurred during upload: {e}")
