@@ -1,7 +1,5 @@
-transformers
-peft
-trl
-accelerate
-torch
-huggingface_hub
-datasets
+langchain
+ctransformers
+sentence-transformers
+faiss-cpu
+streamlit== 1.22.0
