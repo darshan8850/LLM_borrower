@@ -1,5 +1,11 @@
-langchain
-ctransformers
-sentence-transformers
+pypdf
+langchain==0.1.6
+torch
+accelerate
+bitsandbytes
+transformers
+sentence_transformers
 faiss-cpu
-streamlit== 1.22.0
+ctransformers
+streamlit
+streamlit-chat
